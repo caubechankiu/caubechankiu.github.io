@@ -12,6 +12,9 @@ RabbitMQ và Apache Kafka là hai hệ thống messaging phổ biến, được 
 
 ## 1. Kiến trúc và cơ chế hoạt động
 ### RabbitMQ
+
+![Rabbitmq Architecture](../../static/rabbitmq.png)
+
 RabbitMQ là một message broker hoạt động theo mô hình message queue. Nó hỗ trợ nhiều mô hình trao đổi tin nhắn, bao gồm:
 - **Point-to-Point (Queue-based)**: Tin nhắn được gửi đến một hàng đợi và được xử lý bởi một consumer duy nhất.
 - **Publish-Subscribe (Exchange-based)**: Tin nhắn được gửi đến một exchange, sau đó phân phối đến nhiều consumer theo các quy tắc routing.
