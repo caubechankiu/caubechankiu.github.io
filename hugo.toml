@@ -1,0 +1,4 @@
+baseURL = 'https://caubechankiu.github.io/'
+languageCode = 'vi-VN'
+title = "caubechankiu's miscellaneous notes"
+theme = 'ananke'
