@@ -1,4 +1,14 @@
 baseURL = 'https://caubechankiu.github.io/'
 languageCode = 'vi-VN'
 title = "caubechankiu's miscellaneous notes"
-theme = 'ananke'
+theme = 'archie'
+
+[[params.social]]
+name = "GitHub"
+icon = "github"
+url = "https://github.com/caubechankiu"
+
+[[params.social]]
+name = "Facebook"
+icon = "facebook"
+url = "https://www.facebook.com/trinhthevils"

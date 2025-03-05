@@ -2,11 +2,10 @@
 date = '2025-03-04T10:35:19+07:00'
 draft = false
 title = 'Rabbitmq vs Kafka'
+summary = 'RabbitMQ và Apache Kafka là hai hệ thống messaging phổ biến, được sử dụng rộng rãi trong các ứng dụng phân tán. Mỗi công nghệ đều có những ưu điểm và nhược điểm riêng, phù hợp với từng trường hợp sử dụng khác nhau. Trong bài viết này, chúng ta sẽ so sánh RabbitMQ và Kafka dựa trên các tiêu chí quan trọng.'
 tags = ['message queue']
 categories = []
 +++
-
-# So sánh RabbitMQ và Kafka: Chọn hệ thống nào cho ứng dụng của bạn?
 
 RabbitMQ và Apache Kafka là hai hệ thống messaging phổ biến, được sử dụng rộng rãi trong các ứng dụng phân tán. Mỗi công nghệ đều có những ưu điểm và nhược điểm riêng, phù hợp với từng trường hợp sử dụng khác nhau. Trong bài viết này, chúng ta sẽ so sánh RabbitMQ và Kafka dựa trên các tiêu chí quan trọng.
 

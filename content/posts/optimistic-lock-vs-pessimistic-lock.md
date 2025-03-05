@@ -2,11 +2,10 @@
 date = '2020-03-04T09:47:31+07:00'
 draft = false
 title = 'Optimistic Lock vs Pessimistic Lock'
+summary = 'Trong quản lý giao dịch và cạnh tranh truy cập dữ liệu, có hai chiến lược chính để kiểm soát tính nhất quán: **Optimistic Lock** và **Pessimistic Lock**. Mỗi loại có cách tiếp cận khác nhau trong việc xử lý xung đột dữ liệu. Bài viết này sẽ phân tích chi tiết hai loại lock này, đồng thời giải thích hai dạng của **Pessimistic Lock** là **Shared Lock** và **Exclusive Lock**.'
 tags = ['database']
 categories = []
 +++
-
-# Optimistic Lock vs Pessimistic Lock: Sự khác biệt và ứng dụng thực tế
 
 Trong quản lý giao dịch và cạnh tranh truy cập dữ liệu, có hai chiến lược chính để kiểm soát tính nhất quán: **Optimistic Lock** và **Pessimistic Lock**. Mỗi loại có cách tiếp cận khác nhau trong việc xử lý xung đột dữ liệu. Bài viết này sẽ phân tích chi tiết hai loại lock này, đồng thời giải thích hai dạng của **Pessimistic Lock** là **Shared Lock** và **Exclusive Lock**.
 
