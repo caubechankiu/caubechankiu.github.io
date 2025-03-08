@@ -3,6 +3,11 @@ languageCode = 'vi-VN'
 title = "caubechankiu's miscellaneous notes"
 theme = 'archie'
 
+[params]
+  mode="toggle" # color-mode → light,dark,toggle or auto
+  useCDN=false # don't use CDNs for fonts and icons, instead serve them locally.
+  customcss = ["css/archie.css"]
+
 [[params.social]]
 name = "GitHub"
 icon = "github"
@@ -12,3 +17,23 @@ url = "https://github.com/caubechankiu"
 name = "Facebook"
 icon = "facebook"
 url = "https://www.facebook.com/trinhthevils"
+
+[[menu.main]]
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "All posts"
+url = "/posts"
+weight = 2
+
+[[menu.main]]
+name = "About"
+url = "/about"
+weight = 3
+
+[[menu.main]]
+name = "Tags"
+url = "/tags"
+weight = 4
