@@ -25,6 +25,8 @@ Vì không thể đạt được cả ba yếu tố trên cùng lúc, các hệ 
 - **AP (Availability + Partition Tolerance):** Hệ thống đảm bảo luôn phản hồi yêu cầu và chịu được phân vùng, nhưng có thể trả về dữ liệu cũ hoặc không nhất quán.
 - **CA (Consistency + Availability):** Hệ thống đảm bảo cả tính nhất quán và sẵn sàng, nhưng không thể chịu được lỗi phân vùng. Tuy nhiên, trong môi trường thực tế, không có hệ thống phân tán nào hoàn toàn thuộc mô hình CA vì phân vùng mạng là điều không thể tránh khỏi.
 
+{{<figure src="./image1.png" width="500px" class="center">}}
+
 ## 3. Ứng dụng thực tế của định lý CAP
 
 Khi thiết kế hệ thống phân tán, ta phải đưa ra quyết định dựa trên ưu tiên của ứng dụng:
