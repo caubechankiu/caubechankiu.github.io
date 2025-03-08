@@ -1,0 +1,150 @@
+<!doctype html><html><head lang=en><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><title>Distributed ID generator - caubechankiu's miscellaneous notes</title><meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="Nguồn mình copy nguyên văn ở zalo-go-advanced và không sửa gì cả. Các bạn có thể vào bài viết gốc để xem trong đó còn nhiều kiến thức thú vị hơn. Đôi khi chúng ta cần tạo ra một ID tương tự như ID tăng tự động của MySQL và có tính chất không được trùng lặp. Chúng ta có thể sử dụng ID để hỗ trợ các ngữ cảnh trong kinh doanh. Điển hình, khi có chương trình khuyến mãi trong thương mại điện tử, một số lượng lớn đơn đặt hàng sẽ tràn vào hệ thống trong một khoảng thời gian ngắn, tạo ra khoảng 10 ngàn đơn mỗi giây, mỗi đơn sẽ tương ứng với một ID định danh."><meta property="og:image" content><meta property="og:url" content="https://caubechankiu.github.io/posts/distributed-id-generator/"><meta property="og:site_name" content="caubechankiu's miscellaneous notes"><meta property="og:title" content="Distributed ID generator"><meta property="og:description" content="Nguồn mình copy nguyên văn ở zalo-go-advanced và không sửa gì cả. Các bạn có thể vào bài viết gốc để xem trong đó còn nhiều kiến thức thú vị hơn. Đôi khi chúng ta cần tạo ra một ID tương tự như ID tăng tự động của MySQL và có tính chất không được trùng lặp. Chúng ta có thể sử dụng ID để hỗ trợ các ngữ cảnh trong kinh doanh. Điển hình, khi có chương trình khuyến mãi trong thương mại điện tử, một số lượng lớn đơn đặt hàng sẽ tràn vào hệ thống trong một khoảng thời gian ngắn, tạo ra khoảng 10 ngàn đơn mỗi giây, mỗi đơn sẽ tương ứng với một ID định danh."><meta property="og:locale" content="vi_VN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-01-25T09:47:31+07:00"><meta property="article:modified_time" content="2020-01-25T09:47:31+07:00"><meta property="article:tag" content="Distributed System"><meta name=twitter:card content="summary"><meta name=twitter:title content="Distributed ID generator"><meta name=twitter:description content="Nguồn mình copy nguyên văn ở zalo-go-advanced và không sửa gì cả. Các bạn có thể vào bài viết gốc để xem trong đó còn nhiều kiến thức thú vị hơn. Đôi khi chúng ta cần tạo ra một ID tương tự như ID tăng tự động của MySQL và có tính chất không được trùng lặp. Chúng ta có thể sử dụng ID để hỗ trợ các ngữ cảnh trong kinh doanh. Điển hình, khi có chương trình khuyến mãi trong thương mại điện tử, một số lượng lớn đơn đặt hàng sẽ tràn vào hệ thống trong một khoảng thời gian ngắn, tạo ra khoảng 10 ngàn đơn mỗi giây, mỗi đơn sẽ tương ứng với một ID định danh."><link href=https://caubechankiu.github.io/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css rel=stylesheet><link rel=stylesheet type=text/css media=screen href=https://caubechankiu.github.io/css/main.6a0f23ea50fd34b46fee262a5a68e17d458c51a2bc99ba1ba018065de6b180c3.css><link id=darkModeStyle rel=stylesheet type=text/css href=https://caubechankiu.github.io/css/dark.50b57e12d401420df23965fed157368aba37b76df0ecefd0b1ecd4da664f01a0.css disabled><link rel=stylesheet type=text/css href=https://caubechankiu.github.io/css/archie.90f4a1321261c2df9485c29a7877582160bb95d018fefaa5f2199bccf7b169f5.css></head><body><div class=content><header><div class=main><a href=https://caubechankiu.github.io/>caubechankiu's miscellaneous notes</a></div><nav><a href=/>Home</a>
+<a href=/posts>All posts</a>
+<a href=/tags>Tags</a>
+| <span id=dark-mode-toggle onclick=toggleTheme()><svg class="feather"><use href="/svg/feather-sprite.51cf5647cb1987f769b616558f2620fd9423d72058490231b391bf6aa3744b55.svg#sun"/></svg></span>
+<script src=https://caubechankiu.github.io/js/themetoggle.js></script></nav></header><main><article><div class=post-container><div class=post-content><div class=title><h1 class=title>Distributed ID generator</h1><div class=meta>Posted on Jan 25, 2020</div></div><section class=body><p>Nguồn mình copy nguyên văn ở <a href=https://zalopay-oss.github.io/go-advanced/ch5-distributed-system/ch5-01-dist-id.html>zalo-go-advanced</a> và không sửa gì cả. Các bạn có thể vào bài viết gốc để xem trong đó còn nhiều kiến thức thú vị hơn.</p><p>Đôi khi chúng ta cần tạo ra một ID tương tự như ID tăng tự động của MySQL và có tính chất không được trùng lặp. Chúng ta có thể sử dụng ID để hỗ trợ các ngữ cảnh trong kinh doanh. Điển hình, khi có chương trình khuyến mãi trong thương mại điện tử, một số lượng lớn đơn đặt hàng sẽ tràn vào hệ thống trong một khoảng thời gian ngắn, tạo ra khoảng 10 ngàn đơn mỗi giây, mỗi đơn sẽ tương ứng với một ID định danh.</p><p>Trước khi chèn vào cơ sở dữ liệu, chúng ta cần cung cấp cho các thông tin đó một ID, sau đó chèn nó vào cơ sở dữ liệu. Yêu cầu đối với ID này là có thông tin về thời gian. Nhờ vậy, cơ sở dữ liệu của chúng ta vẫn có thể sắp xếp các tin nhắn đó theo thứ tự thời gian.</p><p>Thuật toán <a href=https://developer.twitter.com/en/docs/basics/twitter-ids.html>snowflake</a> của Twitter là giải pháp điển hình trong ngữ cảnh này. Hãy nhìn vào hình sau:</p><p><img src=ch6-1-snowflake.png alt></p><p>Đầu tiên, ta xác định rằng giá trị là 64 bit, kiểu dữ liệu tương ứng bên Go là int64, chúng được chia thành bốn phần:</p><ul><li>Không sử dụng bit đầu tiên vì bit này là bit dấu.</li><li><code>timestamp</code>: sử dụng 41 bit để biểu thị timestamp khi nhận được yêu cầu, tính bằng milliseconds.</li><li><code>datacenter_id</code>: 5 chữ số để biểu thị id của trung tâm dữ liệu.</li><li><code>worker_id</code>: 5 chữ số để biểu thị id của server.</li><li><code>sequence_id</code>: cuối cùng là id tăng vòng lặp 12 bit ( tăng từ 0 đến 111111111111 rồi trở về 0).</li></ul><p>Cơ chế này có thể hỗ trợ chúng ta tạo ra <code>2 ^ 12 = 4096</code> tin nhắn trong cùng một millisecond trên cùng một server. Vậy chúng ta có tổng cộng có 4096 triệu tin nhắn trong một giây. Nó là hoàn toàn đủ để sử dụng trong các trường hợp cần một số lượng ID lớn trong thời gian ngắn.</p><p><code>timestamp</code> gồm 41 chữ số nên có thể hỗ trợ chúng ta trong 69 năm. Tất nhiên, thời gian tính bằng mili giây của chúng ta có thể không thực sự bắt đầu từ năm 1970, vì nếu như vậy thì hệ thống sẽ chỉ hoạt động đến <code>2039/9/7 23:47:35</code> , do đó, chúng chỉ nên tăng so với một mốc thời gian nhất định. Ví dụ: hệ thống của chúng ta là bắt đầu chạy vào 2018-08-01, thì chúng ta có thể coi mốc thời gian này là <code>2018-08-01 00: 00: 00.000</code> và tăng lên từ đó.</p><h2 id=1-phân-công-worker_id>1 Phân công worker_id</h2><p><code>timestamp</code>, <code>datacenter_id</code>, <code>worker_id</code> và <code>sequence_id</code> là bốn trường, riêng timestamp và sequence_id được tạo bởi chương trình khi chạy. Còn datacenter_id và worker_id cần lấy trong giai đoạn triển khai và khi chương trình đã được khởi động, nó không thể thay đổi.</p><p>Nhìn chung, các server trong các trung tâm dữ liệu khác nhau sẽ cung cấp các API tương ứng để lấy id của trung tâm dữ liệu, vì vậy datacenter_id có thể dễ dàng lấy trong giai đoạn triển khai. Còn worker_id là một id mà chúng ta gán một cách &ldquo;logically&rdquo; cho từng máy. Chúng ta nên xử lý thế nào? Ý tưởng đơn giản là sử dụng các công cụ cung cấp tính năng ID tự tăng, chẳng hạn như trong MySQL:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>mysql&gt; insert into a <span style=color:#f92672>(</span>ip<span style=color:#f92672>)</span> values<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;10.1.2.101&#34;</span><span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>Query OK, <span style=color:#ae81ff>1</span> row affected <span style=color:#f92672>(</span>0.00 sec<span style=color:#f92672>)</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>mysql&gt; <span style=color:#66d9ef>select</span> last_insert_id<span style=color:#f92672>()</span>;
+</span></span><span style=display:flex><span>+------------------+
+</span></span><span style=display:flex><span>| last_insert_id<span style=color:#f92672>()</span> |
+</span></span><span style=display:flex><span>+------------------+
+</span></span><span style=display:flex><span>|                <span style=color:#ae81ff>2</span> |
+</span></span><span style=display:flex><span>+------------------+
+</span></span><span style=display:flex><span><span style=color:#ae81ff>1</span> row in set <span style=color:#f92672>(</span>0.00 sec<span style=color:#f92672>)</span>
+</span></span></code></pre></div><p>Khi bạn đã nhận được ID từ MySQL, worker_id sẽ được duy trì cục bộ, tránh được trường hợp làm mới mỗi khi bạn truy cập worker_id.</p><p>Tất nhiên, sử dụng MySQL đồng nghĩa với việc thêm một phụ thuộc bên ngoài vào service tạo ID. Chúng ta đều biết việc càng thêm nhiều phụ thuộc, khả năng phục vụ của service càng tệ.</p><p>Xem xét đến việc có một service tạo ID bị lỗi trong cluster, một phần của ID bị mất trong một khoảng thời gian, thì chúng ta cần gắn trực tiếp worker_id vào cấu hình của worker. Khi hệ thống đó hoạt động lại, đoạn script triển khai sẽ quy định giá trị worker_id.</p><h2 id=2-các-open-source-hiện-có>2 Các Open source hiện có</h2><h3 id=21-hiện-thực-theo-snowflake-chuẩn>2.1 Hiện thực theo snowflake chuẩn</h3><p><a href=github.com/bwmarrin/snowflake>Snowflake</a> là một hiện thực Snowflake của Go khá nhẹ. Bạn có thể sử dụng phần định nghĩa của nó, xem dưới đây.</p><p><img src=ch6-2-snowflake-easy.png alt></p><p>Nó giống hoàn toàn như snowflake tiêu chuẩn. Và tương đối đơn giản để sử dụng như ví dụ sau:</p><p><em><strong>main.go</strong></em></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;os&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;github.com/bwmarrin/snowflake&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// khởi tại một node</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>n</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>snowflake</span>.<span style=color:#a6e22e>NewNode</span>(<span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>      println(<span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Exit</span>(<span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>3</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// tạo ID</span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>id</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>n</span>.<span style=color:#a6e22e>Generate</span>()
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;id&#34;</span>, <span style=color:#a6e22e>id</span>)
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(
+</span></span><span style=display:flex><span>         <span style=color:#e6db74>&#34;node: &#34;</span>, <span style=color:#a6e22e>id</span>.<span style=color:#a6e22e>Node</span>(),
+</span></span><span style=display:flex><span>         <span style=color:#e6db74>&#34;step: &#34;</span>, <span style=color:#a6e22e>id</span>.<span style=color:#a6e22e>Step</span>(),
+</span></span><span style=display:flex><span>         <span style=color:#e6db74>&#34;time: &#34;</span>, <span style=color:#a6e22e>id</span>.<span style=color:#a6e22e>Time</span>(),
+</span></span><span style=display:flex><span>         <span style=color:#e6db74>&#34;\n&#34;</span>,
+</span></span><span style=display:flex><span>      )
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// output:</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// id 1160090501362225152</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// node:  1 step:  0 time:  1565422103621 </span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// id 1160090501362225153</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// node:  1 step:  1 time:  1565422103621 </span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// id 1160090501362225154</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// node:  1 step:  2 time:  1565422103621</span>
+</span></span></code></pre></div><p>Dĩ nhiên, thư viện này cũng cho phép chúng ta tùy chỉnh vài thông số, các trường có thể tùy chỉnh như:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>   <span style=color:#75715e>// Epoch là thời gian bắt đầu</span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// Epoch được thiết lập theo twitter snowflake epoch vào thởi điểm Nov 04 2010 01:42:54 UTC</span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// bạn có thể thiết lập Epoch theo thời gian của ứng dụng của bạn.</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>Epoch</span> <span style=color:#66d9ef>int64</span> = <span style=color:#ae81ff>1288834974657</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// độ dài bit của máy chủ hoạt động</span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// nhớ rằng, bạn có tổng 22 bits chia sẻ giữa Node/Step</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>NodeBits</span> <span style=color:#66d9ef>uint8</span> = <span style=color:#ae81ff>10</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// số bit để sử dụng cho Step</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>StepBits</span> <span style=color:#66d9ef>uint8</span> = <span style=color:#ae81ff>12</span>
+</span></span></code></pre></div><h3 id=22-sonyflake>2.2 Sonyflake</h3><p><a href=https://github.com/sony/sonyflake>Sonyflake</a> là một dự án Open source của Sony. Ý tưởng cơ bản tương tự như snowflake, nhưng phân bổ bit hơi khác.</p><p><img src=ch6-snoyflake.png alt></p><p>Thời gian ở đây chỉ sử dụng 39 bit, nhưng đơn vị thời gian trở thành 10ms. Về mặt lý thuyết, nó dài hơn thời gian của snowflake chuẩn đến 41 bit (174 năm).</p><p><code>Sequence ID</code> giống với với định nghĩa trước đó, <code>Machine ID</code> thực sự là id của Node. Sự khác biệt giữa <code>sonyflake</code> là các tham số cấu hình trong quá trình khởi động:</p><p>Cấu trúc của <code>Settings</code> như sau:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Settings</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// tương tự như Epoch</span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// mặc định bắt đầu vào ngày 2014-09-01 00:00:00 +0000 UTC</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>StartTime</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// hàm do người dùng định nghĩa</span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// mặc định là 16bit cuối của IP gốc</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>MachineID</span> <span style=color:#66d9ef>func</span>() (<span style=color:#66d9ef>uint16</span>, <span style=color:#66d9ef>error</span>)
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// hàm kiểm tra MachineID có trùng hay không</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>CheckMachineID</span> <span style=color:#66d9ef>func</span>(<span style=color:#66d9ef>uint16</span>) <span style=color:#66d9ef>bool</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Sử dụng <code>CheckMachineID</code> là thiết kế khá thông minh. Nếu có một bộ lưu trữ tập trung và hỗ trợ kiểm tra sự trùng lặp, thì chúng ta có thể tùy chỉnh logic để kiểm tra xem <code>MachineID</code> có trùng không. Nếu công ty có cụm Redis được tạo sẵn, thì chúng dễ dàng kiểm tra trùng bằng các loại collection của Redis.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>Redis 127.0.0.1:6379&gt; SADD base64_encoding_of_last16bits MzI0Mgo<span style=color:#f92672>=</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>(</span>integer<span style=color:#f92672>)</span> <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>Redis 127.0.0.1:6379&gt; SADD base64_encoding_of_last16bits MzI0Mgo<span style=color:#f92672>=</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>(</span>integer<span style=color:#f92672>)</span> <span style=color:#ae81ff>0</span>
+</span></span></code></pre></div><p><em><strong>main.go</strong></em></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;os&#34;</span>
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;time&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;github.com/sony/sonyflake&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// getMachineID hàm lấy MachineID</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>getMachineID</span>() (<span style=color:#66d9ef>uint16</span>, <span style=color:#66d9ef>error</span>) {
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>machineID</span> <span style=color:#66d9ef>uint16</span>
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// đọc MachineID từ file ở local</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>machineID</span> = <span style=color:#a6e22e>readMachineIDFromLocalFile</span>()
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>machineID</span> <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> {
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// nếu không có</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// gọi hàm generateMachineID để tạo ID</span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>machineID</span>, <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>generateMachineID</span>()
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>If</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>         <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>, <span style=color:#a6e22e>err</span>
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>machineID</span>, <span style=color:#66d9ef>nil</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// checkMachineID hàm kiểm tra MachineID có trùng không</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>checkMachineID</span>(<span style=color:#a6e22e>machineID</span> <span style=color:#66d9ef>uint16</span>) <span style=color:#66d9ef>bool</span> {
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// thêm machineID vào redis</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>saddResult</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>saddMachineIDToRedisSet</span>()
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> <span style=color:#f92672>||</span> <span style=color:#a6e22e>saddResult</span> <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// lưu lại machineID xuống file ở local</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>saveMachineIDToLocalFile</span>(<span style=color:#a6e22e>machineID</span>)
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>t</span>, <span style=color:#a6e22e>_</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Parse</span>(<span style=color:#e6db74>&#34;2006-01-02&#34;</span>, <span style=color:#e6db74>&#34;2018-01-01&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// khởi tạo struct setting</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>settings</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>sonyflake</span>.<span style=color:#a6e22e>Settings</span>{
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>StartTime</span>: <span style=color:#a6e22e>t</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>MachineID</span>: <span style=color:#a6e22e>getMachineID</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>CheckMachineID</span>: <span style=color:#a6e22e>checkMachineID</span>,
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// tạo sonyflake struct</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>sf</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>sonyflake</span>.<span style=color:#a6e22e>NewSonyflake</span>(<span style=color:#a6e22e>settings</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#75715e>// lấy ID</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>id</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>sf</span>.<span style=color:#a6e22e>NextID</span>()
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Exit</span>(<span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;ID: &#34;</span>, <span style=color:#a6e22e>id</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// output:</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// ID: 84989976554504193</span>
+</span></span></code></pre></div></section><div class=post-tags><nav class="nav tags"><ul class=tags><li><a href=/tags/distributed-system>distributed system</a></li></ul></nav></div></div></div></article></main><footer><div style=display:flex><a class=soc href=https://github.com/caubechankiu rel=me title=GitHub><svg class="feather"><use href="/svg/feather-sprite.51cf5647cb1987f769b616558f2620fd9423d72058490231b391bf6aa3744b55.svg#github"/></svg></a><a class=border></a><a class=soc href=https://www.facebook.com/trinhthevils rel=me title=Facebook><svg class="feather"><use href="/svg/feather-sprite.51cf5647cb1987f769b616558f2620fd9423d72058490231b391bf6aa3744b55.svg#facebook"/></svg></a><a class=border></a></div><div class=footer-info>2025 <a href=https://github.com/athul/archie>Archie Theme</a> | Built with <a href=https://gohugo.io>Hugo</a></div></footer></div></body></html>
