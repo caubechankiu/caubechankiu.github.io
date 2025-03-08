@@ -1,0 +1,14 @@
+html {
+  font-family: 'Fira Code', monospace;
+  /* font-family: 'JetBrains Mono', monospace */
+}
+
+p {
+  font-family: 'Fira Code', monospace;
+  /* font-family: 'JetBrains Mono', monospace */
+}
+
+figure.center {
+  display: block;
+  text-align: center;
+}
