@@ -2,12 +2,12 @@
 date = '2020-01-25T09:47:31+07:00'
 draft = false
 title = 'Distributed ID generator'
-summary = ' Nguồn mình copy nguyên văn ở [zalo-go-advanced](https://zalopay-oss.github.io/go-advanced/ch5-distributed-system/ch5-01-dist-id.html) và không sửa gì cả. Các bạn có thể vào bài viết gốc để xem trong đó còn nhiều kiến thức thú vị hơn. Đôi khi chúng ta cần tạo ra một ID tương tự như ID tăng tự động của MySQL và có tính chất không được trùng lặp. Chúng ta có thể sử dụng ID để hỗ trợ các ngữ cảnh trong kinh doanh. Điển hình, khi có chương trình khuyến mãi trong thương mại điện tử, một số lượng lớn đơn đặt hàng sẽ tràn vào hệ thống trong một khoảng thời gian ngắn, tạo ra khoảng 10 ngàn đơn mỗi giây, mỗi đơn sẽ tương ứng với một ID định danh.'
+summary = ' Nguồn mình copy nguyên văn ở [zalo-go-advanced](https://zalopay-oss.github.io/go-advanced/ch5-distributed-system/ch5-01-dist-id.html) và không sửa gì cả. Trong bài viết gốc còn nhiều kiến thức thú vị hơn. Đôi khi chúng ta cần tạo ra một ID tương tự như ID tăng tự động của MySQL và có tính chất không được trùng lặp. Chúng ta có thể sử dụng ID để hỗ trợ các ngữ cảnh trong kinh doanh. Điển hình, khi có chương trình khuyến mãi trong thương mại điện tử, một số lượng lớn đơn đặt hàng sẽ tràn vào hệ thống trong một khoảng thời gian ngắn, tạo ra khoảng 10 ngàn đơn mỗi giây, mỗi đơn sẽ tương ứng với một ID định danh.'
 tags = ['distributed system']
 categories = []
 +++
 
-Nguồn mình copy nguyên văn ở [zalo-go-advanced](https://zalopay-oss.github.io/go-advanced/ch5-distributed-system/ch5-01-dist-id.html) và không sửa gì cả. Các bạn có thể vào bài viết gốc để xem trong đó còn nhiều kiến thức thú vị hơn.
+Nguồn mình copy nguyên văn ở [zalo-go-advanced](https://zalopay-oss.github.io/go-advanced/ch5-distributed-system/ch5-01-dist-id.html) và không sửa gì cả. Trong bài viết gốc còn nhiều kiến thức thú vị hơn.
 
 Đôi khi chúng ta cần tạo ra một ID tương tự như ID tăng tự động của MySQL và có tính chất không được trùng lặp. Chúng ta có thể sử dụng ID để hỗ trợ các ngữ cảnh trong kinh doanh. Điển hình, khi có chương trình khuyến mãi trong thương mại điện tử, một số lượng lớn đơn đặt hàng sẽ tràn vào hệ thống trong một khoảng thời gian ngắn, tạo ra khoảng 10 ngàn đơn mỗi giây, mỗi đơn sẽ tương ứng với một ID định danh.
 
