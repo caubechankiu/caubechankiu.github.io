@@ -16,7 +16,7 @@ Hiểu đúng về sự đánh đổi trong hệ thống phân tán.
 - **Consistency (Nhất quán):** Mọi node trong hệ thống luôn có cùng một trạng thái dữ liệu tại một thời điểm bất kỳ.
 - **Availability (Sẵn sàng):** Hệ thống luôn phản hồi mọi yêu cầu đọc/ghi ngay cả khi một số node bị lỗi.
 - **Partition Tolerance (Khả năng chịu phân vùng):** Hệ thống tiếp tục hoạt động ngay cả khi có sự cố mạng khiến một số node không thể liên lạc với nhau.
-
+![](image2.png)
 ## 2. Ý nghĩa của định lý CAP
 
 Vì không thể đạt được cả ba yếu tố trên cùng lúc, các hệ thống phân tán phải lựa chọn hai trong ba thuộc tính này. Điều này dẫn đến ba mô hình phổ biến:
