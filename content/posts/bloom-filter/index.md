@@ -60,3 +60,42 @@ Xác suất *false positive* có thể được tính gần đúng bằng công 
 $$ 
 P = \left(1 - e^{-kn/m} \right)^k
 $$
+
+Để tối ưu, kích thước mảng bit *m* và số hàm băm *k* thường được chọn như sau:
+
+$$
+m = -\frac{n \ln p}{(\ln 2)^2} \quad \text{và} \quad k = \frac{m}{n} \ln 2
+$$
+
+**Ví dụ**: Nếu bạn muốn lưu 1 triệu phần tử với xác suất *false positive* là 1%, bạn cần mảng bit khoảng 9.6 triệu bit (1.2 MB) và 7 hàm băm.
+
+## Ưu điểm của Bloom Filter
+1. **Tiết kiệm không gian**: Chỉ cần một mảng bit nhỏ thay vì lưu toàn bộ dữ liệu.
+2. **Hiệu suất cao**: Thêm và kiểm tra phần tử có độ phức tạp O(k), không phụ thuộc vào kích thước tập hợp.
+3. **Không có *false negative***: Nếu Bloom Filter nói "không có", thì chắc chắn không có.
+
+## Nhược điểm của Bloom Filter
+1. ***False positive***: Có thể trả lời sai rằng phần tử tồn tại.
+2. **Không xóa được phần tử**: Vì các bit được chia sẻ giữa nhiều phần tử, việc xóa một phần tử có thể ảnh hưởng đến các phần tử khác (dù có biến thể như *Counting Bloom Filter* khắc phục được điều này).
+3. **Cần cấu hình trước**: Phải xác định kích thước *m* và số hàm băm *k* dựa trên số phần tử dự kiến.
+
+## Ứng dụng thực tế của Bloom Filter
+Bloom Filter xuất hiện trong rất nhiều hệ thống thực tế:
+1. **Cơ sở dữ liệu**: 
+   - Google Bigtable và Apache Cassandra dùng Bloom Filter để giảm truy cập đĩa bằng cách kiểm tra xem một khóa có tồn tại trong tập hợp trước khi đọc dữ liệu.
+2. **Bộ nhớ cache**: 
+   - Các hệ thống như Squid Proxy dùng nó để kiểm tra nhanh xem một URL đã được lưu trong cache hay chưa.
+3. **Kiểm tra trùng lặp**: 
+   - Các công cụ như Google Chrome dùng Bloom Filter để cảnh báo người dùng về các trang web độc hại mà không cần lưu toàn bộ danh sách.
+4. **Blockchain**: 
+   - Bitcoin sử dụng Bloom Filter trong giao thức SPV (*Simplified Payment Verification*) để kiểm tra giao dịch mà không cần tải toàn bộ blockchain.
+
+## Biến thể của Bloom Filter
+Ngoài phiên bản cơ bản, còn có một số biến thể nổi bật:
+- ***Counting Bloom Filter***: Thay bit bằng bộ đếm (*counter*) để hỗ trợ xóa phần tử.
+- ***Scalable Bloom Filter***: Tự động mở rộng khi tập hợp lớn hơn dự kiến.
+- ***Cuckoo Filter***: Cải thiện hiệu suất và hỗ trợ xóa với tỷ lệ *false positive* thấp hơn.
+
+## Kết luận
+
+Bloom Filter là một công cụ tuyệt vời khi bạn cần kiểm tra thành viên trong một tập hợp lớn với tốc độ nhanh và ít tài nguyên, chấp nhận một chút sai số nhỏ. Dù không hoàn hảo trong mọi tình huống, sự kết hợp giữa hiệu quả và đơn giản của nó đã khiến Bloom Filter trở thành một phần không thể thiếu trong các hệ thống hiện đại. Nếu bạn đang xây dựng một ứng dụng cần xử lý dữ liệu lớn, hãy cân nhắc sử dụng Bloom Filter – nó có thể là "vị cứu tinh" cho vấn đề hiệu suất của bạn!
