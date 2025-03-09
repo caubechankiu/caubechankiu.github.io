@@ -60,7 +60,7 @@ Xem xét đến việc có một service tạo ID bị lỗi trong cluster, mộ
 
 ### 2.1 Hiện thực theo snowflake chuẩn
 
-[Snowflake](github.com/bwmarrin/snowflake) là một hiện thực Snowflake của Go khá nhẹ. Bạn có thể sử dụng phần định nghĩa của nó, xem dưới đây.
+[Snowflake](https://github.com/bwmarrin/snowflake) là một hiện thực Snowflake của Go khá nhẹ. Bạn có thể sử dụng phần định nghĩa của nó, xem dưới đây.
 
 ![](ch6-2-snowflake-easy.png)
 
