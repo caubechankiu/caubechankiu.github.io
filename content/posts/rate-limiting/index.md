@@ -99,13 +99,9 @@ Giới hạn theo user là cách tiếp cận phổ biến. Mỗi user được 
 Một cách tiếp cận khác là sử dụng giới hạn theo từng endpoint. Giới hạn này được áp dụng cho tất cả user và có thể được đặt dựa trên khả năng thực tế của server thông qua các bài kiểm tra hiệu suất (benchmark). So với giới hạn theo từng user, cách này dễ cấu hình hơn và đáng tin cậy hơn trong việc ngăn server bị quá tải. Tuy nhiên, một user hoạt động quá mức có thể làm ảnh hưởng đến các user khác.
 
 Chiến lược giới hạn có thể kết hợp nhiều cách khác nhau.
-
 - **Theo user và từng endpoint**: Ví dụ, user A truy cập vào endpoint sendEmail. Không nhất thiết phải chi tiết đến mức này, nhưng có thể hữu ích đối với các endpoint quan trọng.
-
 - **Theo user**: Ngoài giới hạn trên từng endpoint, user A có thể có một giới hạn tổng thể là 1000 request/giờ cho tất cả API.
-
 - **Theo endpoint**: Đây là cơ chế bảo vệ chung của server để đảm bảo không có endpoint nào bị quá tải. Nếu các giới hạn theo user được thiết lập hợp lý, giới hạn này thường không bị chạm đến.
-
 - **Theo toàn bộ server**: Cuối cùng, một giới hạn tổng thể về số lượng request mà server có thể xử lý. Điều này quan trọng vì ngay cả khi các endpoint hoạt động trong giới hạn riêng của chúng, chúng vẫn không hoàn toàn độc lập: server vẫn có giới hạn tài nguyên để xử lý yêu cầu, mở/đóng kết nối mạng, v.v.
 
 
