@@ -100,4 +100,7 @@ Giả sử chúng ta gửi 10.000 request và tất cả đều thất bại vì
 - **Retry Filter**: Đây là hàm xử lý lỗi trả về và quyết định xem có nên thử lại hay không.
 - **Base and Max Delay**: Thời gian chờ tối thiểu và tối đã giữa các lần thử lại (khi đã kết hợp `Backoff` và `Jitter`)
 
-Khi điều chỉnh các giá trị trên sẽ ảnh hưởng đến thời gian chờ của user. Đây là yếu tố cần cân nhắc khi thực hiện điều chỉnh các giá trị cho phù hợp
+Khi điều chỉnh các giá trị trên sẽ ảnh hưởng đến thời gian chờ của user. Đây là yếu tố cần cân nhắc khi thực hiện điều chỉnh các giá trị cho phù hợp.
+
+## Tại sao lại cần cả Circuit Breaker và Retry
+Nếu chỉ dùng Circuit Breaker, ứng dụng có thể từ bỏ quá sớm khi một lỗi tạm thời xảy ra. Một số lỗi có thể được giải quyết chỉ bằng cách retry (ví dụ: timeout, lỗi kết nối tạm thời). Nếu không có retry, lỗi nhỏ này có thể làm tăng tỷ lệ lỗi, khiến Circuit Breaker kích hoạt không cần thiết. Nếu chỉ dùng Retry, hệ thống có thể bị quá tải do các request liên tục thử lại. 
