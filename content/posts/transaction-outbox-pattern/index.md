@@ -1,6 +1,15 @@
++++
+date = '2023-12-21T09:47:31+07:00'
+draft = false
+title = 'Transaction Outbox Pattern'
+summary = 'Transaction Outbox Pattern: Giải pháp đảm bảo tính nhất quán trong hệ thống phân tán'
+tags = ['microservices', 'consistency', 'distributed system']
+categories = []
++++
+
 ## Transaction Outbox Pattern: Giải pháp đảm bảo tính nhất quán trong hệ thống phân tán
 
-Trong thế giới phát triển phần mềm hiện đại, đặc biệt là với các hệ thống phân tán (distributed systems), việc đảm bảo tính nhất quán (consistency) giữa cơ sở dữ liệu và các dịch vụ khác (như message broker, hệ thống bên ngoài) là một thách thức lớn. Một trong những giải pháp phổ biến để giải quyết vấn đề này là **Transaction Outbox Pattern**. Trong bài blog này, chúng ta sẽ cùng tìm hiểu chi tiết về mẫu thiết kế này: nó là gì, tại sao cần nó, cách nó hoạt động và cách triển khai trong thực tế.
+Trong thế giới phát triển phần mềm hiện đại, đặc biệt là với các hệ thống phân tán (distributed systems), việc đảm bảo tính nhất quán (consistency) giữa cơ sở dữ liệu và các dịch vụ khác (như message broker, hệ thống bên ngoài) là một thách thức lớn. Một trong những giải pháp phổ biến để giải quyết vấn đề này là **Transaction Outbox Pattern**. Chúng ta sẽ cùng tìm hiểu chi tiết về mẫu thiết kế này: nó là gì, tại sao cần nó, cách nó hoạt động và cách triển khai trong thực tế.
 
 ### Transaction Outbox Pattern là gì?
 
