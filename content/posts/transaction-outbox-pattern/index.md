@@ -3,7 +3,7 @@ date = '2023-12-21T09:47:31+07:00'
 draft = false
 title = 'Transaction Outbox Pattern'
 summary = 'Transaction Outbox Pattern: Giải pháp đảm bảo tính nhất quán trong hệ thống phân tán'
-tags = ['microservices', 'consistency', 'distributed system']
+tags = ['microservice', 'consistency', 'distributed system']
 categories = []
 +++
 
