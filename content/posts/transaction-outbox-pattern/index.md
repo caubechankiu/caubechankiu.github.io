@@ -13,7 +13,7 @@ Trong thế giới phát triển phần mềm hiện đại, đặc biệt là v
 
 ### Transaction Outbox Pattern là gì?
 
-Transaction Outbox Pattern là một mẫu thiết kế được sử dụng để đảm bảo rằng các thay đổi trong database và việc gửi message tới các hệ thống khác (thường qua message queue như Kafka, RabbitMQ) được thực hiện một cách nhất quán và đáng tin cậy. Ý tưởng chính là thay vì gửi message trực tiếp tới message broker trong cùng một giao dịch (transaction) với thay đổi database, chúng ta lưu message đó vào một bảng trung gian (gọi là "outbox") trong cùng database, sau đó một tiến trình riêng biệt sẽ đọc và gửi message này đi.
+Transaction Outbox Pattern là một mẫu thiết kế được sử dụng để đảm bảo rằng các thay đổi trong database và việc gửi message tới các hệ thống khác (thường qua message queue như Kafka, RabbitMQ) được thực hiện một cách nhất quán và đáng tin cậy. Ý tưởng chính là thay vì gửi message trực tiếp tới message broker trong cùng một transaction với thay đổi database, chúng ta lưu message đó vào một bảng trung gian (gọi là "outbox") trong cùng database, sau đó một tiến trình riêng biệt sẽ đọc và gửi message này đi.
 
 Mẫu này thường được sử dụng trong các hệ thống microservices, nơi mà việc phối hợp giữa các service khác nhau đòi hỏi tính nhất quán cao, nhưng không thể dựa vào giao dịch phân tán (distributed transaction) do độ phức tạp và chi phí hiệu suất.
 
