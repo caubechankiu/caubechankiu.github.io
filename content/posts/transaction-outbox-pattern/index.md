@@ -63,7 +63,7 @@ Bảng outbox trong cơ sở dữ liệu thường có cấu trúc như sau:
 | `created_at`   | Thời gian tạo bản ghi                                               |
 | `processed_at` | Thời gian thông điệp được xử lý (có thể null nếu chưa xử lý)        |
 
-#### Lợi ích của Transaction Outbox Pattern
+### Lợi ích của Transaction Outbox Pattern
 
 1. **Tính nhất quán (Consistency)**:
    - Vì dữ liệu và thông điệp được ghi trong cùng một giao dịch, không có nguy cơ dữ liệu được lưu mà thông điệp không được gửi (hoặc ngược lại).
@@ -77,7 +77,7 @@ Bảng outbox trong cơ sở dữ liệu thường có cấu trúc như sau:
 4. **Dễ triển khai**:
    - Chỉ cần một bảng trong cơ sở dữ liệu và một worker đơn giản, không yêu cầu công cụ hoặc framework phức tạp.
 
-#### Hạn chế của Transaction Outbox Pattern
+### Hạn chế của Transaction Outbox Pattern
 
 1. **Độ trễ (Latency)**:
    - Vì thông điệp không được gửi ngay lập tức mà phải chờ worker xử lý, có thể xảy ra độ trễ nhỏ giữa thời điểm dữ liệu được ghi và thời điểm thông điệp được gửi.
