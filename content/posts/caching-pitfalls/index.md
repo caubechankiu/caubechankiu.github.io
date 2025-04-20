@@ -1,7 +1,7 @@
 ---
 date: 2023-07-25
 draft: false
-title: "Những Cạm Bẫy Caching Mà Mọi Lập Trình Viên Nên Biết"
+title: "Caching Pitfalls"
 summary: 'Caching là một khái niệm quan trọng trong thiết kế hệ thống, đóng vai trò then chốt cho hiệu suất nhưng cũng có thể gây ra nhiều vấn đề nếu không được xử lý đúng cách.'
 tags: ["caching", "system design"]
 categories: []
