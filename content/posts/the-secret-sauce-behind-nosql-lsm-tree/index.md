@@ -1,7 +1,7 @@
 ---
 date: 2023-08-29
 draft: false
-title: "Bí mật đằng sau NoSQL: Cấu trúc dữ liệu LSM Tree"
+title: "The Secret Sauce Behind NoSQL: LSM Tree"
 summary: 'Các cơ sở dữ liệu NoSQL như Cassandra đã bùng nổ về độ phổ biến trong những năm gần đây. Một trong những động lực chính là nhu cầu không ngừng về việc tiếp nhận lượng dữ liệu khổng lồ từ ngày càng nhiều nguồn như ứng dụng di động và thiết bị IoT. Bí mật đằng sau nhiều cơ sở dữ liệu NoSQL này là một cấu trúc dữ liệu gọi là Log Structured Merge tree (LSM tree).'
 tags: ["database", "nosql"]
 ---

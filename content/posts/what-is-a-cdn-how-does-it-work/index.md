@@ -1,7 +1,7 @@
 +++
 date = '2023-11-15T09:47:31+07:00'
 draft = false
-title = 'CDN là gì và cách nó hoạt động'
+title = 'What Is A CDN? How Does It Work?'
 summary = 'CDN, hay mạng phân phối nội dung (Content Delivery Network), đã xuất hiện từ cuối những năm 90. Ban đầu, nó được phát triển để tăng tốc việc phân phối nội dung HTML tĩnh cho người dùng trên toàn thế giới.'
 tags = ['cdn']
 categories = []
