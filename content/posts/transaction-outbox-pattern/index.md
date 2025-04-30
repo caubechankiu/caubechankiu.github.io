@@ -22,7 +22,7 @@ Mẫu này thường được sử dụng trong các hệ thống microservices,
 Hãy tưởng tượng một kịch bản phổ biến trong hệ thống microservices:
 
 1. Một service nhận được yêu cầu tạo đơn hàng mới.
-2. Dịch vụ này cần:
+2. Service này cần:
    - Lưu thông tin đơn hàng vào database.
    - Gửi một message tới message queue (ví dụ: "Đơn hàng đã được tạo") để thông báo cho các service khác (như service giao hàng hoặc service thanh toán).
 

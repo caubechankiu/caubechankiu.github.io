@@ -62,14 +62,14 @@ Trong bối cảnh microservices, tính bất biến đặc biệt quan trọng 
 Trong môi trường như vậy, lỗi mạng, trùng lặp request và lỗi hệ thống là điều không thể tránh khỏi, và tính bất biến giúp giảm thiểu tác động của những vấn đề này.
 
 Khi một thao tác trong microservice có tính bất biến, nó đảm bảo rằng ngay cả khi thao tác được lặp lại, nó sẽ không gây ra tác dụng phụ ngoài ý muốn hoặc dẫn đến trạng thái dữ liệu không nhất quán.
-Giả sử một user thực hiện thanh toán, nhưng do sự cố mạng hoặc hết thời gian chờ dẫn đến không nhận được response. Nếu client tự động gửi lại request thanh toán, dịch vụ thanh toán có tính bất biến sẽ đảm bảo rằng giao dịch không bị xử lý hai lần, ngăn chặn tình trạng user bị tính phí hai lần.
+Giả sử một user thực hiện thanh toán, nhưng do sự cố mạng hoặc hết thời gian chờ dẫn đến không nhận được response. Nếu client tự động gửi lại request thanh toán, service thanh toán có tính bất biến sẽ đảm bảo rằng giao dịch không bị xử lý hai lần, ngăn chặn tình trạng user bị tính phí hai lần.
 
 Các microservice có tính bất biến được trang bị tốt hơn để xử lý các lỗi tạm thời và sự cố mạng.
 Một microservice được thiết kế với tính bất biến có thể xử lý các request trùng lặp một cách trơn tru, đảm bảo rằng hệ thống vẫn duy trì độ bền vững và hoạt động chính xác ngay cả trong thời điểm không ổn định.
 
 Với lợi ích to lớn như vậy, tại sao chúng ta không làm cho tất cả các request đều có tính chất bất biến?
 
-Một số loại request rõ ràng có thể hưởng lợi từ tính bất biến, chẳng hạn như các giao dịch thẻ thanh toán mà chúng ta đã đề cập ở trên. Trên thực tế, hầu hết (nếu không muốn nói là tất cả) các hệ thống thanh toán đều hỗ trợ tính bất biến. Nhưng việc triển khai tính bất biến cũng phức tạp và có thể gây ra độ trễ bổ sung. Do đó, không phải dịch vụ nào cũng cần tính bất biến. Ví dụ:
+Một số loại request rõ ràng có thể hưởng lợi từ tính bất biến, chẳng hạn như các giao dịch thẻ thanh toán mà chúng ta đã đề cập ở trên. Trên thực tế, hầu hết (nếu không muốn nói là tất cả) các hệ thống thanh toán đều hỗ trợ tính bất biến. Nhưng việc triển khai tính bất biến cũng phức tạp và có thể gây ra độ trễ bổ sung. Do đó, không phải service nào cũng cần tính bất biến. Ví dụ:
 - Chúng ta không cần tính bất biến trong hệ thống ghi log. Nếu hệ thống khởi động lại, việc có các thông điệp log trùng lặp là chấp nhận được.
 - Chúng ta không muốn tính bất biến trong các ứng dụng nhắn tin như messenger, telegram. Khi có 2 message bị trùng lặp, user chỉ cần xoá đi 1 message là được.
 
