@@ -44,6 +44,8 @@ Việc đưa một Message Broker vào kiến trúc mang lại những lợi íc
 
 ## III. Các Khái niệm Cốt lõi cần nắm vững
 
+![exchanges-topic-fanout-direct](exchanges-topic-fanout-direct.png)
+
 Để sử dụng RabbitMQ, bạn cần hiểu rõ 6 khái niệm cơ bản sau:
 
 1.  **Producer (Nhà sản xuất):** Ứng dụng tạo ra tin nhắn và gửi nó đến RabbitMQ.
