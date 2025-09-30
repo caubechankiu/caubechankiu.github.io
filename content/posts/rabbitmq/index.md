@@ -1,3 +1,12 @@
++++
+date = '2023-12-17T23:40:15+07:00'
+draft = false
+title = 'Rabbitmq'
+summary = 'RabbitMQ là gì, cách nó hoạt động, và làm thế nào nó có thể biến hệ thống của bạn trở nên linh hoạt và đáng tin cậy hơn.'
+tags = ['message queue', 'microservice']
+categories = []
++++
+
 # RabbitMQ là gì và tại sao bạn cần nó để xây dựng các ứng dụng phân tán?
 
 Trong kỷ nguyên của **microservices** và **ứng dụng phân tán**, việc các dịch vụ giao tiếp với nhau là điều tất yếu. Tuy nhiên, nếu bạn chỉ dựa vào các lời gọi **API đồng bộ** (Service A phải chờ Service B phản hồi), bạn sẽ đối mặt với vấn đề: nghẽn cổ chai, khó mở rộng, và sự sụp đổ dây chuyền khi một dịch vụ bị lỗi.
