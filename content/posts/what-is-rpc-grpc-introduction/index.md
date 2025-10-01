@@ -1,7 +1,8 @@
 ---
 title: "gRPC là gì? Giới thiệu về gRPC"
 date: 2023-07-15T10:00:00+07:00
-tags: ["gRPC", "RPC", "Protocol Buffers", "HTTP/2", "Microservices"]
+summary: 'gRPC là một framework RPC (Remote Procedure Call) mã nguồn mở được Google tạo ra vào năm 2016. Đây là phiên bản viết lại của cơ sở hạ tầng RPC nội bộ mà Google đã sử dụng trong nhiều năm.'
+tags: ["grpc", "microservice"]
 ---
 
 # gRPC là gì? Giới thiệu về gRPC
