@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Microservices on caubechankiu's miscellaneous notes</title><link>https://caubechankiu.github.io/tags/microservices/</link><description>Recent content in Microservices on caubechankiu's miscellaneous notes</description><generator>Hugo</generator><language>vi-VN</language><copyright>© caubechankiu</copyright><lastBuildDate>Sat, 15 Jul 2023 10:00:00 +0700</lastBuildDate><atom:link href="https://caubechankiu.github.io/tags/microservices/index.xml" rel="self" type="application/rss+xml"/><item><title>gRPC là gì? Giới thiệu về gRPC</title><link>https://caubechankiu.github.io/posts/what-is-rpc-grpc-introduction/</link><pubDate>Sat, 15 Jul 2023 10:00:00 +0700</pubDate><guid>https://caubechankiu.github.io/posts/what-is-rpc-grpc-introduction/</guid><description>&lt;h1 id="grpc-là-gì-giới-thiệu-về-grpc">gRPC là gì? Giới thiệu về gRPC&lt;/h1>
-&lt;p>gRPC là một framework RPC (Remote Procedure Call) mã nguồn mở được Google tạo ra vào năm 2016. Đây là phiên bản viết lại của cơ sở hạ tầng RPC nội bộ mà Google đã sử dụng trong nhiều năm.&lt;/p>
-&lt;h2 id="rpc-là-gì">RPC là gì?&lt;/h2>
-&lt;p>Trước khi đi sâu vào gRPC, chúng ta hãy hiểu RPC là gì:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Local Procedure Call (Lời gọi thủ tục cục bộ)&lt;/strong>: Là một lời gọi hàm trong một tiến trình để thực thi một đoạn mã.&lt;/li>
-&lt;li>&lt;strong>Remote Procedure Call (Lời gọi thủ tục từ xa)&lt;/strong>: Cho phép một máy gọi và thực thi mã trên một máy khác như thể đó là một lời gọi hàm cục bộ từ góc độ người dùng.&lt;/li>
-&lt;/ul>
-&lt;p>gRPC là một triển khai phổ biến của RPC. Nhiều tổ chức đã áp dụng gRPC làm cơ chế RPC ưu tiên để kết nối số lượng lớn các microservice chạy trong và giữa các trung tâm dữ liệu.&lt;/p></description></item></channel></rss>
