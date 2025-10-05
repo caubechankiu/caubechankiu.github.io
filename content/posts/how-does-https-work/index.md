@@ -11,7 +11,7 @@ Ngày nay, hầu hết các website đều yêu cầu HTTPS. Vậy HTTPS hoạt 
 
 ## Vấn Đề Với HTTP Thông Thường
 
-Không có HTTPS, việc giao tiếp giữa trình duyệt và máy chủ diễn ra dưới dạng văn bản thuần túy. Điều này có nghĩa là mật khẩu bạn nhập hoặc số thẻ tín dụng bạn gửi qua internet có thể được đọc bởi bất kỳ ai có khả năng chặn nó.
+Không có HTTPS, việc giao tiếp giữa trình duyệt và server diễn ra dưới dạng văn bản thuần túy. Điều này có nghĩa là mật khẩu bạn nhập hoặc số thẻ tín dụng bạn gửi qua internet có thể được đọc bởi bất kỳ ai có khả năng chặn nó.
 
 ## HTTPS Là Gì?
 
@@ -36,7 +36,7 @@ Mô hình này không chỉ áp dụng cho HTTP mà còn cho nhiều giao thức
 
 Nguyên tắc chung là: **Giao thức gốc + TLS = Phiên bản bảo mật**. TLS cung cấp ba tính năng chính:
 1. **Mã hóa**: Dữ liệu không thể đọc được nếu bị chặn
-2. **Xác thực**: Đảm bảo bạn đang giao tiếp với đúng máy chủ
+2. **Xác thực**: Đảm bảo bạn đang giao tiếp với đúng server
 3. **Toàn vẹn**: Dữ liệu không bị thay đổi trong quá trình truyền
 
 ## Cách Thức Hoạt Động Của TLS Handshake
@@ -45,24 +45,24 @@ Hãy xem xét cách thức hoạt động của TLS handshake. Có một số b�
 
 ### Bước 1: Thiết Lập Kết Nối TCP
 
-Giống như trong trường hợp HTTP, trình duyệt thiết lập kết nối TCP với máy chủ.
+Giống như trong trường hợp HTTP, trình duyệt thiết lập kết nối TCP với server.
 
 ### Bước 2: Client Hello
 
-Đây là nơi TLS handshake bắt đầu. Trình duyệt gửi một thông điệp "client hello" đến máy chủ. Trong thông điệp Hello này, trình duyệt thông báo cho máy chủ những điều sau:
+Đây là nơi TLS handshake bắt đầu. Trình duyệt gửi một thông điệp "client hello" đến server. Trong thông điệp Hello này, trình duyệt thông báo cho server những điều sau:
 
 1. **Phiên bản TLS** mà nó có thể hỗ trợ - có thể là TLS 1.2, TLS 1.3, v.v.
 2. **Cipher Suite** mà nó hỗ trợ - Cipher Suite là một tập hợp các thuật toán mã hóa được sử dụng để mã hóa dữ liệu.
 
 ### Bước 3: Server Hello và Certificate
 
-Sau khi nhận được client hello, máy chủ được chọn Cipher Suite và phiên bản TLS để sử dụng dựa trên các tùy chọn mà nó nhận được từ client. Nó gửi những thông tin này trong thông điệp "server hello" trở lại cho client.
+Sau khi nhận được client hello, server được chọn Cipher Suite và phiên bản TLS để sử dụng dựa trên các tùy chọn mà nó nhận được từ client. Nó gửi những thông tin này trong thông điệp "server hello" trở lại cho client.
 
-Máy chủ sau đó gửi certificate (chứng chỉ) cho client. Certificate bao gồm nhiều thứ khác nhau, một trong những điều quan trọng là public key (khóa công khai) của máy chủ.
+Máy chủ sau đó gửi certificate (chứng chỉ) cho client. Certificate bao gồm nhiều thứ khác nhau, một trong những điều quan trọng là public key (khóa công khai) của server.
 
 Trước khi sử dụng certificate, client phải kiểm tra xem certificate này có đáng tin cậy hay không. **Bước này cực kỳ quan trọng** vì nếu bỏ qua, hệ thống sẽ dễ bị tấn công Man-in-the-Middle (MITM).
 
-### Nguy Cơ MITM (Man in the Middle) Attack Khi Không Kiểm Tra Certificate
+**Nguy Cơ MITM (Man in the Middle) Attack Khi Không Kiểm Tra Certificate**
 
 Nếu client không xác minh certificate của server, kẻ tấn công có thể thực hiện MITM attack như sau:
 
@@ -95,25 +95,21 @@ Nếu bất kỳ bước kiểm tra nào thất bại, trình duyệt sẽ hiể
 
 Client sử dụng public key trong một thứ gọi là mã hóa bất đối xứng (asymmetric encryption). Trong mã hóa bất đối xứng, một phần dữ liệu được mã hóa bằng public key chỉ có thể được giải mã bằng private key (khóa riêng tư).
 
-Điều này kết thúc bước hai - giai đoạn hello của TLS handshake. Tại thời điểm này, client có certificate của máy chủ, và client và máy chủ đã thống nhất về phiên bản TLS và Cipher Suite để sử dụng.
+Điều này kết thúc bước hai - giai đoạn hello của TLS handshake. Tại thời điểm này, client có certificate của server, và client và server đã thống nhất về phiên bản TLS và Cipher Suite để sử dụng.
 
 ### Bước 4: Trao Đổi Khóa
 
-Bây giờ đến bước ba - đây là bước mà client và máy chủ đưa ra một khóa mã hóa chung để sử dụng để mã hóa dữ liệu.
+Bây giờ đến bước ba - đây là bước mà client và server đưa ra một khóa mã hóa chung để sử dụng để mã hóa dữ liệu.
 
-Và đây là nơi mã hóa bất đối xứng lại xuất hiện. Với mã hóa bất đối xứng, dữ liệu được mã hóa ở phía client bằng public key từ máy chủ chỉ có thể được giải mã bởi máy chủ. Đây là cách client gửi khóa mã hóa một cách an toàn đến máy chủ qua internet rộng mở.
+Và đây là nơi mã hóa bất đối xứng lại xuất hiện. Với mã hóa bất đối xứng, dữ liệu được mã hóa ở phía client bằng public key từ server chỉ có thể được giải mã bởi server. Đây là cách client gửi khóa mã hóa một cách an toàn đến server qua internet rộng mở.
 
-Tất cả điều này được thực hiện trong thông điệp "client key exchange". Chi tiết chính xác thay đổi tùy thuộc vào Cipher Suite được sử dụng. Ở đây chúng ta sử dụng RSA làm ví dụ vì nó dễ hiểu nhất.
-
-### Ví Dụ Với RSA
-
-Với RSA, client tạo ra một khóa mã hóa (còn gọi là session key), mã hóa nó bằng public key của máy chủ, và gửi session key đã mã hóa đến máy chủ qua Internet.
+Tất cả điều này được thực hiện trong thông điệp "client key exchange". Chi tiết chính xác thay đổi tùy thuộc vào Cipher Suite được sử dụng. Ở đây chúng ta sử dụng RSA làm ví dụ vì nó dễ hiểu nhất. Với RSA, client tạo ra một khóa mã hóa (còn gọi là session key), mã hóa nó bằng public key của server, và gửi session key đã mã hóa đến server qua Internet.
 
 Máy chủ nhận session key đã mã hóa và giải mã nó bằng private key của mình. Bây giờ cả hai bên đều giữ session key.
 
 ### Bước 5: Giao Tiếp Mã Hóa
 
-Đây là nơi họ bước vào bước 4 của TLS handshake, nơi họ sử dụng session key và Cipher Suite đã thống nhất để gửi dữ liệu mã hóa qua lại trong một kênh hai chiều an toàn.
+Đây là bước cuối cùng của TLS handshake. Bây giờ, client và server có thể sử dụng session key và Cipher Suite đã thống nhất để gửi dữ liệu mã hóa qua lại trong một kênh hai chiều an toàn.
 
 ![https](image-1.png)
 
@@ -127,6 +123,6 @@ Lý do chính là mã hóa bất đối xứng tốn kém về mặt tính toán
 
 Trong ví dụ của tôi sử dụng RSA cho mã hóa bất đối xứng để trao đổi session key đối xứng một cách an toàn. Một lần nữa, tôi chọn RSA vì nó dễ hiểu.
 
-Tuy nhiên, mã hóa bất đối xứng không phải là cách duy nhất để chia sẻ session key giữa client và máy chủ. Thực tế, trong TLS 1.3, RSA không còn được hỗ trợ như một phương pháp trao đổi khóa.
+Tuy nhiên, mã hóa bất đối xứng không phải là cách duy nhất để chia sẻ session key giữa client và server. Thực tế, trong TLS 1.3, RSA không còn được hỗ trợ như một phương pháp trao đổi khóa.
 
 Diffie-Hellman là cách phổ biến hơn ngày nay để trao đổi session key. Diffie-Hellman phức tạp, nhưng tóm lại, nó sử dụng một số toán học nâng cao liên quan đến các số nguyên tố lớn để tạo ra một session key chung mà không bao giờ truyền public key qua mạng.
