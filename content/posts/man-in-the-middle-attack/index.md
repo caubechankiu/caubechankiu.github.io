@@ -17,6 +17,8 @@ Hãy tưởng tượng bạn đang thì thầm một mật khẩu với ngân h�
 
 **Man-in-the-Middle** là một hình thức tấn công mạng mà kẻ xấu bí mật xen vào giữa hai bên đang giao tiếp, sau đó giả mạo cả hai bên để chặn, đánh cắp hoặc thay đổi dữ liệu được truyền đi. Cả hai nạn nhân đều tin rằng họ đang giao tiếp trực tiếp với nhau, trong khi thực tế họ đang "nói chuyện" với kẻ tấn công.
 
+{{<figure src="man-in-middle-attack.png" width="500px" class="center">}}
+
 Cơ chế tấn công MITM diễn ra qua ba giai đoạn cơ bản:
 
 ### 1. Chặn (Interception)
@@ -24,7 +26,7 @@ Cơ chế tấn công MITM diễn ra qua ba giai đoạn cơ bản:
 Bước đầu tiên là đưa kẻ tấn công vào giữa luồng giao tiếp. Kẻ tấn công sử dụng các kỹ thuật để đánh lừa mạng lưới hoặc thiết bị của bạn.
 
 * **ARP Spoofing:** Trong mạng cục bộ (như Wi-Fi gia đình, Wi-Fi công cộng), kẻ tấn công gửi các gói tin ARP giả mạo đến cả máy nạn nhân và router, thông báo rằng địa chỉ MAC của chúng là địa chỉ của router (với nạn nhân) và là địa chỉ của nạn nhân (với router). Lúc này, mọi gói tin mà nạn nhân gửi ra ngoài (bao gồm cả yêu cầu DNS) đều bị chuyển hướng đến máy của kẻ tấn công trước. Đồng thời tất cả các gói tin đến nạn nhân cũng phải đi qua máy của kẻ tấn công trước. Lúc này, máy của kẻ tấn công đã trở thành "*người đàn ông ở giữa*".
-* **Evil Twin (Wi-Fi giả mạo):** Kẻ tấn công tạo ra một điểm truy cập Wi-Fi giả mạo có tên tương tự như mạng công cộng (ví dụ: "$Free\_Airport\_WIFI$"). Bất kỳ ai kết nối vào mạng này đều bị kiểm soát.
+* **Evil Twin (Wi-Fi giả mạo):** Kẻ tấn công tạo ra một điểm truy cập Wi-Fi giả mạo có tên tương tự như mạng công cộng (ví dụ: "Free_Airport_WIFI"). Bất kỳ ai kết nối vào mạng này đều bị kiểm soát.
 
 ### 2. Giải mã và Đánh cắp (Decryption & Impersonation)
 
@@ -61,6 +63,8 @@ Tin tốt là hầu hết các cuộc tấn công MITM có thể được ngăn 
 1.  **Luôn Kiểm tra HTTPS:**
     * **Quy tắc Vàng:** Đừng bao giờ nhập thông tin nhạy cảm (mật khẩu, thẻ) trên một trang web không hiển thị **biểu tượng ổ khóa** và tiền tố **$https://$** trong thanh địa chỉ.
     * Hãy cẩn thận với những trang web ban đầu là HTTPS nhưng đột nhiên chuyển thành HTTP khi bạn bắt đầu nhập dữ liệu.
+
+{{<figure src="detecting-man-in-middle-attack.png" width="500px" class="center">}}
 
 2.  **Sử dụng VPN (Mạng riêng ảo) trên Wi-Fi Công cộng:**
     * **VPN** là tuyến phòng thủ tốt nhất. Nó mã hóa toàn bộ dữ liệu của bạn trước khi nó rời khỏi thiết bị, khiến bất kỳ kẻ tấn công nào chặn được dữ liệu cũng chỉ thấy một "mớ bòng bong" vô nghĩa.
