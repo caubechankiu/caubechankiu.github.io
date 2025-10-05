@@ -56,3 +56,8 @@ Cuối cùng, hãy xem xét quy trình ngược lại. Khi người dùng đăng
 4. Nếu chúng giống nhau, mật khẩu là hợp lệ.
 
 {{<figure src="./image4.png" width="500px" class="center">}}
+
+#### Migrate
+Làm thế nào migrate một hệ thống dùng SHA1 –> bcrypt. Ở đây có 2 trường hợp:
+- Hash password bằng SHA1 nhưng không có salt -> mình gọi là sha1_value. Với trường hợp này ta cần sinh ra thêm salt-per-user và migrate bcrypt(salt, sha1_value) trong đó sha1_value = SHA1(password)
+- Hash password bằng SHA1 + trong DB có salt-per-user, mình có sha1_value, salt. Với trường hợp này thì hơi lằng nhằng hơn 1 xíu, ta cần migrate kiểu bcrypt(salt, SHA1(salt, password)) nếu thực sự muốn bcrypt với salt hoặc thực ra chỉ cần bcrypt(SHA1(salt, password)) cũng được. Tùy tình huống bạn cần tradeoff có thể lựa chọn cách phù hợp.
