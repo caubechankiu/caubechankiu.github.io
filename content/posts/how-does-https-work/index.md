@@ -2,7 +2,7 @@
 title: "HTTPS Hoạt Động Như Thế Nào?"
 date: 2024-10-05
 description: "Tìm hiểu cách thức hoạt động của HTTPS, từ TLS handshake đến mã hóa dữ liệu, và tại sao hầu hết các website hiện nay đều yêu cầu HTTPS."
-tags: ["HTTPS", "TLS", "Security", "Web", "Encryption"]
+tags: ["HTTPS", "TLS", "Security"]
 ---
 
 # HTTPS Hoạt Động Như Thế Nào?
