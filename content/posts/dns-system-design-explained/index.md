@@ -2,16 +2,12 @@
 date = '2024-10-10T10:00:00+07:00'
 draft = false
 title = 'Hệ thống DNS: Thiết kế và Hoạt động'
-summary = 'DNS (Domain Name System) là xương sống của internet, nhưng ít người biết chính xác cách nó hoạt động. Tìm hiểu về thiết kế hệ thống DNS và cách nó dịch tên miền thành địa chỉ IP.'
+summary = 'DNS (Domain Name System) là xương sống của internet, nó dịch các tên miền mà con người có thể đọc được, chẳng hạn như google.com, thành các địa chỉ IP mà máy tính có thể hiểu được.'
 tags = ['dns', 'networking', 'internet']
 categories = []
 +++
 
-DNS (Domain Name System) là xương sống của internet, nhưng ít người biết chính xác cách nó hoạt động. Trong bài viết này, chúng ta sẽ tìm hiểu tất cả về thiết kế hệ thống DNS.
-
-## DNS là gì?
-
-DNS là thư mục của internet. Nó dịch các tên miền mà con người có thể đọc được, chẳng hạn như google.com, thành các địa chỉ IP mà máy tính có thể hiểu được.
+DNS (Domain Name System) là xương sống của internet, nó dịch các tên miền mà con người có thể đọc được, chẳng hạn như google.com, thành các địa chỉ IP mà máy tính có thể hiểu được.
 
 DNS có thể gây nhầm lẫn vì có nhiều loại máy chủ DNS khác nhau trong hệ thống phân cấp DNS, mỗi loại phục vụ một mục đích khác nhau.
 
