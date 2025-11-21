@@ -23,6 +23,12 @@ jobs:
       - name: Build website
         run: hugo --minify
 
+      - name: Install Pagefind
+        run: pip install pagefind-bin
+
+      - name: Generate search index
+        run: python -m pagefind_bin --site public --glob "posts/*/index.html"
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
