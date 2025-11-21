@@ -38,5 +38,5 @@ weight = 3
 
 [[menu.main]]
 name = "Search"
-url = "/search"
+url = "/search/"
 weight = 4
